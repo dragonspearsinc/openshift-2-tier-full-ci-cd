@@ -6,10 +6,9 @@ This application has only been tested on Windows 10/11.  It may work on other OS
 
 It is composed of 4 parts:
 
-1. [Angular 14 front-end](docker-sample-angular) - See the docker-sample-angular folder
-2. [Spring / Maven back-end](springboot-crud) - See the springboot-crud folder
-3. [MySQL 8 database server](docker-mysql-8) - See the docker-mysql-8 folder
-4. [K8s](k8s) - See the k8s folder.  This is where all of our Kubernetes specific deployment manifests are held
+1. [Spring / Maven back-end](springboot-crud) - See the springboot-crud folder
+2. [MySQL 8 database server](docker-mysql-8) - See the docker-mysql-8 folder
+3. [K8s](k8s) - See the k8s folder.  This is where all of our Kubernetes specific deployment manifests are held
 
 
 ## Dependencies
@@ -25,26 +24,21 @@ It is composed of 4 parts:
 
 ## Architecture
 
-Standard 3-tier Angular / Spring / MySQL
-
-![Architecture](support/architecture.png)
+Standard 2-tier Spring / MySQL
 
 ## Troubleshooting commands
 1.  Show info about running pod - `kubectl get pods -o wide`
 1.  Show configuration about pod - `kubectl describe pod {podname / id}`
 1.  Access the pod from your local machine - `kubectl port-forward {podname / id} {outside port}:{container port}` 
 
-
-
 ## First Time Process to run the application
 
 #
 Build the app - We could configure the CI to do this in an automated fashion
 #
-1. `git clone https://github.com/dragonspearsinc/kubernetes-3-tier`
-1. `cd kubernetes-3-tier`
-1. Build the frontend (this could be done by the CI) - `docker build -t dragonspears/frontend ./docker-sample-angular`
-1. Build the frontend (this could be done by the CI) - `docker build -t dragonspears/backend ./springboot-crud`
+1. `git clone https://github.com/dragonspearsinc/kubernetes-2-tier`
+1. `cd kubernetes-2-tier`
+1. Optional - Build the frontend (this could be done by the CI) - `docker build -t dragonspears/backend ./springboot-crud`
 
 #
 Deploy the app
@@ -86,10 +80,6 @@ INSERT INTO `employee-schema`.`employee` (`emp_id`, `first_name`, `last_name`, `
 Test the deployment
 #
 
-Let's connect to the services.  No need to port-forward
-1. `kubectl get services -o wide` - Review the services.
-1. Open a *browser* to: `http://localhost:8080`
-
 ![Browser](./support/Browser%203000.png)
 1. Open your *postman* to: `http://localhost:8080`
 
@@ -101,16 +91,6 @@ Let's connect to the services.  No need to port-forward
 
 ## Scenarios
 
-# Update the Deployment Replicas
-
-1. Open up `./k8s/frontend-deployment.yaml`
-1. Change the `replicas: 1` to `replicas: 4`
-1. `kubectl apply -k k8s`
-1. `kubectl describe deployment frontend` Review the deployment, show it has changed
-1. `kubectl get pods -o wide`
-
-![Replicas](./support/Replicas.png)
-
 # Update the Deployment to use external (outside K8s) DB
 
 ** Note:  This section assumes you have a mysql running external to the cluster, configured, and has data
@@ -119,4 +99,3 @@ Let's connect to the services.  No need to port-forward
 1. Change the connection string from `jdbc:mysql://db:3306/employee-schema` to `jdbc:mysql://db:3306/employee-schema`
 1. `kubectl apply -k k8s`
 1. `kubectl describe deployment backend` Review the deployment, show it has changed
-1. Open a browser to see how the data is now changed: http://localhost:3000
