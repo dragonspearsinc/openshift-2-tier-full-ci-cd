@@ -80,9 +80,6 @@ INSERT INTO `employee-schema`.`employee` (`emp_id`, `first_name`, `last_name`, `
 Test the deployment
 #
 
-![Browser](./support/Browser%203000.png)
-1. Open your *postman* to: `http://localhost:8080`
-
 ![Postman](./support/Postman%20Image%208080.png)
 
 ## Stop the application
